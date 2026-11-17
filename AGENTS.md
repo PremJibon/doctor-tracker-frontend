@@ -1,0 +1,46 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+
+<!-- END:nextjs-agent-rules -->
+
+## Read Before Anything Else
+
+Read in this exact order before any implementation:
+
+1. context/project-overview.md
+2. context/architecture.md
+3. context/api-contract.md
+4. context/ui-tokens.md
+5. context/ui-rules.md
+6. context/ui-registry.md
+7. context/code-standards.md
+8. context/library-docs.md
+9. context/build-plan.md
+10. context/progress-tracker.md
+
+## Rules That Never Change
+
+- Never use hardcoded hex values or raw Tailwind color classes (use semantic tokens from ui-tokens.md)
+- Update `progress-tracker.md` and `ui-registry.md` after every feature
+- Before any third party library — load its installed skill first,
+  then read `context/library-docs.md` for project-specific rules
+- If the same problem persists after one corrective prompt —
+  stop immediately and run /recover
+- Server state lives in TanStack Query; filters and pagination live in URL search params
+- No component is duplicated per page: check `ui-registry.md` and reuse first
+
+## Available Skills
+
+- `/architect` — before any complex feature. Think before building.
+- `/imprint` — after any new UI component. Capture patterns.
+- `/review` — before demo or when something feels off.
+- `/recover` — when something breaks after one failed correction.
+- `/remember save` — when a feature spans multiple sessions.
+- `/remember restore` — when returning after a multi-session feature.
+
+At session start, list installed skills with their one-line descriptions, then route:
+Next.js code -> Next.js skills; UI quality/polish -> design skills (Hallmark etc.);
+performance, accessibility, security, tests -> addyosmani skills; auth/token handling -> SecuritySkills.
