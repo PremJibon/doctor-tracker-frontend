@@ -10,7 +10,30 @@ Doctor Tracker provides medical staff and healthcare executives with real-time o
 
 ---
 
-## 2. Setup Guide
+## 2. Visual Interface & Responsive Screenshots
+
+The user interface follows the **"Clean Clinical"** design system: a calm slate neutral surface (`#F6F8FA`), deep teal sidebar chrome (`#0F2A33`), crisp typography via Inter, and semantic status indicators strictly reserved for state changes.
+
+### Desktop Workstation Experience (1440px)
+
+| View | Screenshot / Preview | Highlights |
+| :--- | :--- | :--- |
+| **Clinical Analytics Dashboard** | ![Dashboard Desktop](docs/screenshots/desktop-dashboard.png) | • 3 KPI StatCards with trend telemetry<br>• Top 10 Doctor Caseload (Recharts BarChart)<br>• Patient Intake Trends (7d / 30d / 12m toggle)<br>• Diagnostic Condition Breakdown (Donut PieChart) |
+| **Doctors Management & Directory** | ![Doctors Directory](docs/screenshots/desktop-doctors.png) | • 400ms debounced search with URL sync<br>• FilterBar with specialty, hospital, and date range<br>• Accessible DataTable with sortable headers<br>• Active filter pill chips with individual dismissal |
+| **Doctor Profile & Patient Roster** | ![Doctor Detail](docs/screenshots/desktop-doctor-detail.png) | • Practitioner metadata hero card<br>• Embedded sub-roster with independent pagination<br>• `AddDoctorPatientDialog` modal trigger<br>• Delete flow guarded by `ConfirmDialog` |
+| **Patients Roster & Diagnostics** | ![Patients Directory](docs/screenshots/desktop-patients.png) | • Severity-coded clinical condition badges<br>• Doctor affiliation links to practitioner profiles<br>• Pre-filled `EditPatientDialog` form modal<br>• Permanent removal with `ConfirmDialog` |
+
+### Mobile Handset Experience (375px)
+
+| View | Screenshot / Preview | Highlights |
+| :--- | :--- | :--- |
+| **Navigation Drawer** | ![Mobile Drawer](docs/screenshots/mobile-drawer.png) | • Slide-over drawer with backdrop blur<br>• Touch-safe interactive links ($\ge 44\text{px}$)<br>• Integrated user profile & sign-out control |
+| **Stacked Card Roster** | ![Mobile Cards](docs/screenshots/mobile-cards.png) | • Semantic `<table>` seamlessly transitions to card stack below `768px`<br>• Zero horizontal viewport overflow<br>• $16\text{px}$ mobile inputs prevent iOS auto-zoom |
+| **Responsive Visualizations** | ![Mobile Charts](docs/screenshots/mobile-charts.png) | • Recharts charts wrapped in `ResponsiveContainer`<br>• Truncated and angled axis labels prevent mobile clipping<br>• Tap-activated clinical inspection tooltips |
+
+---
+
+## 3. Setup Guide
 
 ### Prerequisites
 * **Node.js**: v20.x or higher
@@ -55,7 +78,7 @@ Doctor Tracker provides medical staff and healthcare executives with real-time o
 
 ---
 
-## 3. System Architecture & Data Flow
+## 4. System Architecture & Data Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -88,7 +111,7 @@ Doctor Tracker provides medical staff and healthcare executives with real-time o
 
 ---
 
-## 4. Technical Decisions Deep Dive
+## 5. Technical Decisions Deep Dive
 
 ### Decision 1: In-Memory Access Token Storage vs. `localStorage`
 * **Context**: Single-page web applications often store authentication tokens in `localStorage` or `sessionStorage` for persistence across reloads.
@@ -107,7 +130,7 @@ Doctor Tracker provides medical staff and healthcare executives with real-time o
 
 ---
 
-## 5. Design System: "Clean Clinical"
+## 6. Design System: "Clean Clinical"
 
 Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/globals.css`:
 * **Page Background**: `#F6F8FA`
@@ -122,7 +145,7 @@ Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/gl
 
 ---
 
-## 6. Project Status & Roadmap
+## 7. Project Status & Roadmap
 
 - [x] **Step 1: Setup & Foundations** — Next.js 16 (App Router + Turbopack) + Tailwind v4 + Clean Clinical design tokens + Axios client + Providers
 - [x] **Step 2: Authentication & Route Guarding** — `/login` + in-memory access token + 401 retry queue with httpOnly refresh cookie + protected layout
@@ -137,7 +160,7 @@ Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/gl
 
 ---
 
-## 7. Deployment (Vercel)
+## 8. Deployment (Vercel)
 
 1. Import repository `https://github.com/PremJibon/doctor-tracker-frontend` into [Vercel](https://vercel.com).
 2. Configure Environment Variable:

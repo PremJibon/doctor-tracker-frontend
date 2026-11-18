@@ -53,7 +53,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         <div className="flex items-center justify-between px-2 pt-2">
           <Link
             href="/dashboard"
-            className="flex items-center gap-3 font-semibold text-lg text-white group"
+            className="flex items-center gap-3 font-semibold text-lg text-sidebar-foreground group"
             onClick={onMobileClose}
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
@@ -69,7 +69,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           {mobileOpen && (
             <button
               onClick={onMobileClose}
-              className="lg:hidden p-2 text-sidebar-muted hover:text-white rounded-md cursor-pointer"
+              className="lg:hidden p-2 text-sidebar-muted hover:text-sidebar-foreground rounded-md cursor-pointer"
               aria-label="Close navigation menu"
             >
               <X className="h-5 w-5" />
@@ -93,8 +93,8 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors select-none",
                   isActive
-                    ? "bg-sidebar-active text-white shadow-xs"
-                    : "text-sidebar-muted hover:bg-sidebar-active/60 hover:text-white"
+                    ? "bg-sidebar-active text-sidebar-foreground shadow-xs"
+                    : "text-sidebar-muted hover:bg-sidebar-active/60 hover:text-sidebar-foreground"
                 )}
               >
                 <Icon className={cn("h-5 w-5", isActive ? "text-accent" : "text-sidebar-muted")} />
@@ -108,11 +108,11 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       {/* Footer Profile & Logout */}
       <div className="border-t border-sidebar-active/80 pt-4 pb-2 space-y-3">
         <div className="flex items-center gap-3 px-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-active text-white font-medium text-xs">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-active text-sidebar-foreground font-medium text-xs">
             {user?.email?.charAt(0).toUpperCase() || "A"}
           </div>
           <div className="flex flex-col overflow-hidden">
-            <span className="truncate text-xs font-medium text-white">
+            <span className="truncate text-xs font-medium text-sidebar-foreground">
               {user?.name || "Administrator"}
             </span>
             <span className="truncate text-[11px] text-sidebar-muted">
@@ -144,7 +144,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300"
+            className="fixed inset-0 bg-foreground/60 backdrop-blur-xs transition-opacity duration-300"
             onClick={onMobileClose}
           />
           <div className="fixed inset-y-0 left-0 w-72 shadow-2xl transition-transform duration-300 animate-in slide-in-from-left">
