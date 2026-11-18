@@ -77,7 +77,7 @@ export function EditPatientDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[520px] w-full">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-foreground">
             Edit Patient
@@ -87,7 +87,7 @@ export function EditPatientDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-3 space-y-3">
           {/* Name */}
           <div className="space-y-1">
             <label className="text-sm font-medium text-foreground" htmlFor="edit-name">

@@ -122,7 +122,7 @@ export function AddDoctorPatientDialog({
       )}
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-w-md">
+        <DialogContent>
           <DialogHeader>
             <div className="flex items-center space-x-2 text-primary mb-1">
               <UserPlus className="h-5 w-5" />
@@ -137,7 +137,7 @@ export function AddDoctorPatientDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pt-1">
             {/* Required Doctor Selector when doctorId is not predefined */}
             {!doctorId && (
               <div className="space-y-1 text-left">
@@ -323,7 +323,7 @@ export function AddDoctorPatientDialog({
               </div>
             </div>
 
-            <DialogFooter className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+            <DialogFooter className="pt-2 flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"

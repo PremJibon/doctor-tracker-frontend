@@ -111,7 +111,7 @@ export function CreateDoctorDialog({
       )}
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-w-xl">
+        <DialogContent>
           <DialogHeader>
             <div className="flex items-center space-x-2 text-primary mb-1">
               <UserPlus className="h-5 w-5" />
@@ -122,9 +122,9 @@ export function CreateDoctorDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3.5 pt-1">
             {/* Doctor Name */}
-            <div className="space-y-1.5 text-left">
+            <div className="space-y-1 text-left">
               <label
                 htmlFor="name"
                 className="text-xs font-semibold text-foreground uppercase tracking-wider"
@@ -151,7 +151,7 @@ export function CreateDoctorDialog({
             </div>
 
             {/* Specialization */}
-            <div className="space-y-1.5 text-left">
+            <div className="space-y-1 text-left">
               <label
                 htmlFor="specialization"
                 className="text-xs font-semibold text-foreground uppercase tracking-wider"
@@ -179,10 +179,10 @@ export function CreateDoctorDialog({
 
               {/* Recommendations Chips */}
               <div className="pt-1">
-                <p className="text-[11px] font-medium text-muted-foreground mb-1.5">
+                <p className="text-[11px] font-medium text-muted-foreground mb-1">
                   Recommended Specialties:
                 </p>
-                <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                <div className="flex flex-wrap gap-1.5 max-h-20 overflow-y-auto pr-1">
                   {RECOMMENDED_SPECIALTIES.map((spec) => {
                     const isSelected = selectedSpecialization === spec;
                     return (
@@ -218,7 +218,7 @@ export function CreateDoctorDialog({
             </div>
 
             {/* Hospital Name */}
-            <div className="space-y-1.5 text-left">
+            <div className="space-y-1 text-left">
               <label
                 htmlFor="hospital"
                 className="text-xs font-semibold text-foreground uppercase tracking-wider"
@@ -245,9 +245,9 @@ export function CreateDoctorDialog({
             </div>
 
             {/* Contact Information (Phone and Email) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Phone */}
-              <div className="space-y-1.5 text-left">
+              <div className="space-y-1 text-left">
                 <label
                   htmlFor="phone"
                   className="text-xs font-semibold text-foreground uppercase tracking-wider"
@@ -274,7 +274,7 @@ export function CreateDoctorDialog({
               </div>
 
               {/* Email */}
-              <div className="space-y-1.5 text-left">
+              <div className="space-y-1 text-left">
                 <label
                   htmlFor="email"
                   className="text-xs font-semibold text-foreground uppercase tracking-wider"
@@ -301,7 +301,7 @@ export function CreateDoctorDialog({
               </div>
             </div>
 
-            <DialogFooter className="pt-4">
+            <DialogFooter className="pt-2">
               <Button
                 type="button"
                 variant="outline"
