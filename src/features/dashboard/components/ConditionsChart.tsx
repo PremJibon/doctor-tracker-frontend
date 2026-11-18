@@ -11,7 +11,8 @@ import {
 import { useConditions } from "../hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { PieChart as PieChartIcon } from "lucide-react";
+import { PieChart as PieChartIcon, RotateCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -68,13 +69,31 @@ function CustomLegend({
 }
 
 export function ConditionsChart() {
-  const { data, isLoading, isError } = useConditions();
+  const { data, isLoading, isError, refetch, isRefetching } = useConditions();
 
   if (isLoading) {
     return <Skeleton className="h-64 w-full rounded-lg" />;
   }
 
-  if (isError || !data || data.length === 0) {
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center p-6 space-y-3">
+        <p className="text-sm text-danger font-medium">Failed to load condition distribution</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          disabled={isRefetching}
+          className="gap-2"
+        >
+          <RotateCw className={`h-3.5 w-3.5 ${isRefetching ? "animate-spin" : ""}`} />
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
     return (
       <EmptyState
         icon={<PieChartIcon className="h-5 w-5" />}

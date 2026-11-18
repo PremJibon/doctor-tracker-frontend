@@ -101,6 +101,40 @@ Complete — All 10 Steps Finished & Ready for Production
   - **Official Architecture Fix Applied**: Per Next.js official documentation (`node_modules/next/dist/docs/01-app/02-guides/instant-navigation.md`), configured `experimental.instantInsights.validationLevel = 'manual-warning'` in `next.config.ts`.
   - **Outcome**: Suppressed false-positive dev overlay popups across all pages while preserving full Cache Components and Partial Prefetching optimizations without polluting pages with `export const instant = false`. Clean lint, typecheck, and build verified.
 
+- [x] **Design & Feature Upgrade (Neumorphic "Soft Clinical" & Power Features)**
+  - **1. Neumorphic Design System ("Soft Clinical")**:
+    - Complete token rewrite in `globals.css` and `context/ui-tokens.md` using uniform soft surface `#E6EBF1`, dual-layer shadows (`--shadow-raised`, `--shadow-raised-sm`, `--shadow-inset`, `--shadow-pressed`), dark text `#0F172A` (11.8:1 contrast), and deep primary teal `#0F766E` (4.6:1 contrast).
+    - Mandatory safeguards applied: 1px visible borders with $\ge 3:1$ contrast on all inputs/selects/buttons, 2px offset focus rings, flat tables inside raised cards, and strict `prefers-reduced-motion` compliance.
+    - All shared UI components restyled: `Button`, `Input`, `Card`, `Badge`, `Dialog`, `Skeleton`, `StatCard`, `SearchInput`, `EmptyState`, `Pagination`, `DataTable`.
+  - **2. Sliding Sidebar + Header**:
+    - Desktop smooth width transition between expanded (16rem) and icon rail (5rem) with accessible tooltip overlays.
+    - Hydration-safe `useSyncExternalStore` for desktop `localStorage` preference without layout flashes.
+    - Mobile slide-over drawer with ESC trap, body scroll lock, and route auto-close.
+    - Round raised toggle button in header with animated icon, `Ctrl/Cmd+B` keyboard shortcut, and `aria-expanded`/`aria-controls`.
+    - Header green status dot with pulse glow checking `GET /health` every 60s with zero adjacent text and tooltip "API online".
+  - **3. Popup Calendar Date Range Picker**:
+    - Unified `DateRangePicker` component replacing raw date inputs on `/doctors` and `/patients`.
+    - Dropdown popover with quick presets (Today, 7d, 30d, This Month, 12m), interactive 2-month/1-month calendar, mobile bottom sheet, local Dhaka date strings, and Apply/Clear triggers.
+    - Defensive end-of-day UTC formatting (`T23:59:59.999Z`) for inclusive patient date filtering.
+  - **4. WordPress-Style Bulk Delete**:
+    - Enhanced `DataTable` selection mode with indeterminate header checkbox, shift-click range selection, mobile card selection, and 100-item warning toast.
+    - Floating action dock bar showing selection count, "Select all", "Clear", and "Delete Selected" buttons.
+    - `DoctorBulkDeleteDialog`: 2-stage verification modal testing `cascade=false` first; pivots to Stage 2 with patient counts and typed `DELETE` confirmation if doctors have patients.
+    - `PatientBulkDeleteDialog`: Batch patient deletion modal with cache invalidation across patient, doctor, and dashboard queries.
+  - **5. Professional Dashboard Redesign (5 Rows)**:
+    - Row 1: 4 KPI cards (`Total Doctors`, `Total Patients`, `Avg Patients / Doctor`, `30-Day Admissions` with trend badge vs previous 30-day window).
+    - Row 2: Admissions over time area chart (7d/30d/12m selector) + Medical conditions donut chart.
+    - Row 3: Top doctors by caseload ranked list card (with ranks, avatars, progress bars, specialization badges, hospital info) + Specialty distribution horizontal bar chart.
+    - Row 4: Gender breakdown donut chart + Age groups column chart (0-17, 18-34, 35-49, 50-64, 65+) + Busiest hospitals top 5 ranked card.
+    - Row 5: Recent admissions flat table inside raised card with direct patient links and Dhaka timezone timestamps.
+    - Isolated TanStack queries, last updated timestamp display, and manual refresh button.
+  - **6. Smoothness Pass & Final Quality Gates**:
+    - Subtle route fade-in transition (`animate-fade-in`) with zero layout shift.
+    - Zero raw hex colors or unmapped palette classes in all source code.
+    - Zero TypeScript errors (`npx tsc --noEmit` clean).
+    - Zero ESLint errors or warnings (`npm run lint` clean).
+    - Production build succeeds (`npm run build` — 9 routes compiled).
+
 ## Decisions made
 - Kept access token strictly in-memory; httpOnly refresh cookie handles session persistence across browser refreshes.
 - Used Tailwind v4 `@theme inline` mapping to bind CSS variables directly to utility classes without hardcoded colors.

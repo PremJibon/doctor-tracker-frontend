@@ -19,11 +19,13 @@ import { FilterBar, ActiveFilter } from "@/components/shared/FilterBar";
 import { DataTable, Column } from "@/components/shared/DataTable";
 import { Pagination } from "@/components/shared/Pagination";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { DateRangePicker } from "@/components/shared/DateRangePicker";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useDoctors } from "@/features/doctors/hooks";
 import { CreateDoctorDialog } from "@/features/doctors/components/CreateDoctorDialog";
+import { DoctorBulkDeleteDialog } from "@/features/doctors/components/DoctorBulkDeleteDialog";
 import { Doctor } from "@/types/doctor";
 import { formatDateTime } from "@/lib/utils";
 
@@ -32,6 +34,9 @@ function DoctorsPageContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
+
+  const [selectedDoctorIds, setSelectedDoctorIds] = React.useState<Set<string>>(new Set());
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = React.useState(false);
 
   // Read URL search params
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -42,6 +47,14 @@ function DoctorsPageContent() {
   const from = searchParams.get("from") || undefined;
   const to = searchParams.get("to") || undefined;
   const sort = searchParams.get("sort") || "createdAt:desc";
+
+  // Clear selections whenever filters/search change (adjust during render per React 19)
+  const filterKey = `${search}-${specialization}-${hospital}-${from}-${to}`;
+  const [prevFilterKey, setPrevFilterKey] = React.useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
+    setSelectedDoctorIds(new Set());
+  }
 
   // TanStack Query
   const { data, isLoading, isError, error, refetch, isFetching } = useDoctors({
@@ -101,20 +114,30 @@ function DoctorsPageContent() {
       onRemove: () => updateParam("hospital", null),
     });
   }
-  if (from) {
+  if (from || to) {
+    const fmt = (dStr?: string) => {
+      if (!dStr) return "";
+      const [y, m, d] = dStr.split("-").map(Number);
+      return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(
+        new Date(y, m - 1, d)
+      );
+    };
+    const label =
+      from && to ? `${fmt(from)} – ${fmt(to)}` : from ? `From ${fmt(from)}` : `Until ${fmt(to)}`;
     activeFilters.push({
-      id: "from",
-      label: "From",
-      value: from,
-      onRemove: () => updateParam("from", null),
-    });
-  }
-  if (to) {
-    activeFilters.push({
-      id: "to",
-      label: "To",
-      value: to,
-      onRemove: () => updateParam("to", null),
+      id: "dates",
+      label: "Date",
+      value: label,
+      onRemove: () => {
+        startTransition(() => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete("from");
+          params.delete("to");
+          params.delete("page");
+          const qs = params.toString();
+          router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+        });
+      },
     });
   }
 
@@ -286,37 +309,18 @@ function DoctorsPageContent() {
               placeholder="Filter by hospital..."
               value={hospital || ""}
               onChange={(e) => updateParam("hospital", e.target.value || null)}
-              className="h-10 text-sm"
+              className="h-10 text-sm rounded-xl"
             />
           </div>
 
-          {/* Date Range: From */}
-          <div className="w-full sm:w-36">
-            <Input
-              type="date"
-              aria-label="Filter registered from"
-              value={from || ""}
-              onChange={(e) => updateParam("from", e.target.value || null)}
-              className="h-10 text-xs"
-            />
-          </div>
-
-          {/* Date Range: To */}
-          <div className="w-full sm:w-36">
-            <Input
-              type="date"
-              aria-label="Filter registered to"
-              value={to || ""}
-              onChange={(e) => updateParam("to", e.target.value || null)}
-              className="h-10 text-xs"
-            />
-          </div>
+          {/* Unified Popup Calendar DateRangePicker */}
+          <DateRangePicker fromParam="from" toParam="to" resetPageParam="page" />
         </FilterBar>
       </div>
 
       {/* Main Content Area (4-State Rule) */}
       {isError ? (
-        <div className="rounded-lg border border-danger/30 bg-danger/5 p-6 text-center space-y-3">
+        <div className="rounded-xl border border-danger/30 bg-danger/5 p-6 text-center space-y-3 shadow-raised-sm">
           <div className="flex justify-center text-danger">
             <AlertCircle className="h-8 w-8" />
           </div>
@@ -330,7 +334,7 @@ function DoctorsPageContent() {
             type="button"
             variant="outline"
             onClick={() => refetch()}
-            className="gap-2 min-h-[40px] border-danger/30 text-danger hover:bg-danger/10"
+            className="gap-2 min-h-[40px] border-danger/30 text-danger hover:bg-danger/10 rounded-xl"
           >
             <RefreshCw className="h-4 w-4" />
             <span>Try Again</span>
@@ -346,6 +350,15 @@ function DoctorsPageContent() {
             onRowClick={(doc) => {
               const docId = doc._id || doc.id;
               if (docId) router.push(`/doctors/${docId}`);
+            }}
+            selectable={true}
+            selectedIds={selectedDoctorIds}
+            onSelectionChange={setSelectedDoctorIds}
+            bulkActions={[{ label: "Delete", value: "delete", variant: "danger" }]}
+            onBulkAction={(action) => {
+              if (action === "delete") {
+                setBulkDeleteDialogOpen(true);
+              }
             }}
             emptyState={
               <EmptyState
@@ -432,6 +445,14 @@ function DoctorsPageContent() {
           )}
         </div>
       )}
+
+      {/* Bulk Delete Dialog */}
+      <DoctorBulkDeleteDialog
+        open={bulkDeleteDialogOpen}
+        onOpenChange={setBulkDeleteDialogOpen}
+        selectedIds={Array.from(selectedDoctorIds)}
+        onSuccess={() => setSelectedDoctorIds(new Set())}
+      />
     </div>
   );
 }

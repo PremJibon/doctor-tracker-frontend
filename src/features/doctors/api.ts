@@ -3,12 +3,38 @@ import { ApiListResponse } from "@/types/api";
 import { Doctor, CreateDoctorDto, DoctorFilterParams } from "@/types/doctor";
 import { Patient, CreatePatientDto } from "@/types/patient";
 
+export interface DoctorSkippedEntry {
+  id: string;
+  name: string;
+  reason: "HAS_PATIENTS";
+  patientCount: number;
+}
+
+export interface BulkDeleteDoctorsResult {
+  requested: number;
+  deleted: number;
+  deletedPatients: number;
+  skipped: DoctorSkippedEntry[];
+  notFound: string[];
+}
+
 export const doctorApi = {
   getDoctors: async (params?: DoctorFilterParams): Promise<ApiListResponse<Doctor>> => {
     const res = await apiClient.get<ApiListResponse<Doctor>>("/doctors", {
       params,
     });
     return res.data;
+  },
+
+  bulkDeleteDoctors: async (
+    ids: string[],
+    cascade?: boolean
+  ): Promise<BulkDeleteDoctorsResult> => {
+    const res = await apiClient.post<{ data: BulkDeleteDoctorsResult }>(
+      "/doctors/bulk-delete",
+      { ids, cascade }
+    );
+    return res.data.data;
   },
 
   createDoctor: async (
@@ -79,3 +105,4 @@ export const getDoctorById = doctorApi.getDoctorById;
 export const getDoctorPatients = doctorApi.getDoctorPatients;
 export const addDoctorPatient = doctorApi.addDoctorPatient;
 export const removeDoctorPatient = doctorApi.removeDoctorPatient;
+export const bulkDeleteDoctors = doctorApi.bulkDeleteDoctors;

@@ -13,7 +13,7 @@ import {
 import { usePatientsOverTime } from "../hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type TimeRange = "7d" | "30d" | "12m";
@@ -57,7 +57,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 
 export function PatientsOverTimeChart() {
   const [range, setRange] = useState<TimeRange>("30d");
-  const { data, isLoading, isError } = usePatientsOverTime(range);
+  const { data, isLoading, isError, refetch, isRefetching } = usePatientsOverTime(range);
 
   const chartData = (data || []).map((item) => ({
     date: formatDate(item.date, range),
@@ -83,7 +83,21 @@ export function PatientsOverTimeChart() {
 
       {isLoading ? (
         <Skeleton className="h-56 w-full rounded-lg" />
-      ) : isError || !data || data.length === 0 ? (
+      ) : isError ? (
+        <div className="flex flex-col items-center justify-center text-center p-6 space-y-3">
+          <p className="text-sm text-danger font-medium">Failed to load admission trends</p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            disabled={isRefetching}
+            className="gap-2"
+          >
+            <RotateCw className={`h-3.5 w-3.5 ${isRefetching ? "animate-spin" : ""}`} />
+            Retry
+          </Button>
+        </div>
+      ) : !data || data.length === 0 ? (
         <EmptyState
           icon={<TrendingUp className="h-5 w-5" />}
           title="No trend data"

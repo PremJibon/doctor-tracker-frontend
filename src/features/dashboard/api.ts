@@ -4,6 +4,11 @@ import {
   PatientsPerDoctorItem,
   PatientsOverTimeItem,
   ConditionItem,
+  GenderItem,
+  AgeGroupItem,
+  SpecialtyItem,
+  HospitalItem,
+  RecentAdmissionItem,
 } from "@/types/dashboard";
 
 type TimeRange = "7d" | "30d" | "12m";
@@ -45,6 +50,41 @@ export const dashboardApi = {
     const res = await apiClient.get<
       ConditionItem[] | { data: ConditionItem[] }
     >("/dashboard/conditions");
+    return unwrap(res.data);
+  },
+
+  getGender: async (): Promise<GenderItem[]> => {
+    const res = await apiClient.get<
+      GenderItem[] | { data: GenderItem[] }
+    >("/dashboard/gender");
+    return unwrap(res.data);
+  },
+
+  getAgeGroups: async (): Promise<AgeGroupItem[]> => {
+    const res = await apiClient.get<
+      AgeGroupItem[] | { data: AgeGroupItem[] }
+    >("/dashboard/age-groups");
+    return unwrap(res.data);
+  },
+
+  getSpecialties: async (): Promise<SpecialtyItem[]> => {
+    const res = await apiClient.get<
+      SpecialtyItem[] | { data: SpecialtyItem[] }
+    >("/dashboard/specialties");
+    return unwrap(res.data);
+  },
+
+  getHospitals: async (): Promise<HospitalItem[]> => {
+    const res = await apiClient.get<
+      HospitalItem[] | { data: HospitalItem[] }
+    >("/dashboard/hospitals");
+    return unwrap(res.data);
+  },
+
+  getRecentAdmissions: async (limit: number = 8): Promise<RecentAdmissionItem[]> => {
+    const res = await apiClient.get<
+      RecentAdmissionItem[] | { data: RecentAdmissionItem[] }
+    >("/dashboard/recent-admissions", { params: { limit } });
     return unwrap(res.data);
   },
 };

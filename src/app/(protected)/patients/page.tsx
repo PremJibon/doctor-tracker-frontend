@@ -19,6 +19,7 @@ import { DataTable, Column } from "@/components/shared/DataTable";
 import { Pagination } from "@/components/shared/Pagination";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { DateRangePicker } from "@/components/shared/DateRangePicker";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ import { usePatients, useDeletePatientMutation } from "@/features/patients/hooks
 import { useDoctors } from "@/features/doctors/hooks";
 import { EditPatientDialog } from "@/features/patients/components/EditPatientDialog";
 import { AddDoctorPatientDialog } from "@/features/doctors/components/AddDoctorPatientDialog";
+import { PatientBulkDeleteDialog } from "@/features/patients/components/PatientBulkDeleteDialog";
 import { Patient } from "@/types/patient";
 import { formatDateTime } from "@/lib/utils";
 
@@ -69,6 +71,8 @@ function PatientsPageContent() {
   const [editOpen, setEditOpen] = useState(false);
   const [deletePatient, setDeletePatient] = useState<Patient | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedPatientIds, setSelectedPatientIds] = useState<Set<string>>(new Set());
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
 
   const { mutate: doDelete, isPending: isDeleting } = useDeletePatientMutation();
 
@@ -81,6 +85,14 @@ function PatientsPageContent() {
   const from = searchParams.get("from") || undefined;
   const to = searchParams.get("to") || undefined;
   const sort = searchParams.get("sort") || "createdAt:desc";
+
+  // Clear selections whenever filters/search change (adjust during render per React 19)
+  const filterKey = `${search}-${condition}-${doctorId}-${from}-${to}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
+    setSelectedPatientIds(new Set());
+  }
 
   const { data, isLoading, isError, error, refetch, isFetching } = usePatients({
     page,
@@ -143,20 +155,30 @@ function PatientsPageContent() {
       onRemove: () => updateParam("doctorId", null),
     });
   }
-  if (from) {
+  if (from || to) {
+    const fmt = (dStr?: string) => {
+      if (!dStr) return "";
+      const [y, m, d] = dStr.split("-").map(Number);
+      return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(
+        new Date(y, m - 1, d)
+      );
+    };
+    const label =
+      from && to ? `${fmt(from)} – ${fmt(to)}` : from ? `From ${fmt(from)}` : `Until ${fmt(to)}`;
     activeFilters.push({
-      id: "from",
-      label: "From",
-      value: from,
-      onRemove: () => updateParam("from", null),
-    });
-  }
-  if (to) {
-    activeFilters.push({
-      id: "to",
-      label: "To",
-      value: to,
-      onRemove: () => updateParam("to", null),
+      id: "dates",
+      label: "Date",
+      value: label,
+      onRemove: () => {
+        startTransition(() => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete("from");
+          params.delete("to");
+          params.delete("page");
+          const qs = params.toString();
+          router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+        });
+      },
     });
   }
 
@@ -318,7 +340,7 @@ function PatientsPageContent() {
               value={doctorId || ""}
               onChange={(e) => updateParam("doctorId", e.target.value || null)}
               aria-label="Filter by doctor"
-              className="flex h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex h-10 w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="">All Doctors</option>
               {doctorsList.map((doc) => (
@@ -329,33 +351,14 @@ function PatientsPageContent() {
             </select>
           </div>
 
-          {/* Date Range: From */}
-          <div className="w-full sm:w-36">
-            <Input
-              type="date"
-              aria-label="Filter admitted from"
-              value={from || ""}
-              onChange={(e) => updateParam("from", e.target.value || null)}
-              className="h-10 text-xs"
-            />
-          </div>
-
-          {/* Date Range: To */}
-          <div className="w-full sm:w-36">
-            <Input
-              type="date"
-              aria-label="Filter admitted to"
-              value={to || ""}
-              onChange={(e) => updateParam("to", e.target.value || null)}
-              className="h-10 text-xs"
-            />
-          </div>
+          {/* Unified Popup Calendar DateRangePicker */}
+          <DateRangePicker fromParam="from" toParam="to" resetPageParam="page" />
         </FilterBar>
       </div>
 
       {/* 4-State content area */}
       {isError ? (
-        <div className="rounded-lg border border-danger/30 bg-danger/5 p-6 text-center space-y-3">
+        <div className="rounded-xl border border-danger/30 bg-danger/5 p-6 text-center space-y-3 shadow-raised-sm">
           <div className="flex justify-center text-danger">
             <AlertCircle className="h-8 w-8" />
           </div>
@@ -371,7 +374,7 @@ function PatientsPageContent() {
             type="button"
             variant="outline"
             onClick={() => refetch()}
-            className="gap-2 min-h-[40px] border-danger/30 text-danger hover:bg-danger/10"
+            className="gap-2 min-h-[40px] border-danger/30 text-danger hover:bg-danger/10 rounded-xl"
           >
             <RefreshCw className="h-4 w-4" />
             <span>Try Again</span>
@@ -384,6 +387,15 @@ function PatientsPageContent() {
             data={patients}
             isLoading={isLoading}
             keyExtractor={(p) => p._id || p.id || Math.random().toString()}
+            selectable={true}
+            selectedIds={selectedPatientIds}
+            onSelectionChange={setSelectedPatientIds}
+            bulkActions={[{ label: "Delete", value: "delete", variant: "danger" }]}
+            onBulkAction={(action) => {
+              if (action === "delete") {
+                setBulkDeleteDialogOpen(true);
+              }
+            }}
             emptyState={
               <EmptyState
                 icon={<Users className="h-6 w-6" />}
@@ -509,6 +521,14 @@ function PatientsPageContent() {
             onSuccess: () => setDeleteOpen(false),
           });
         }}
+      />
+
+      {/* Bulk Delete Dialog */}
+      <PatientBulkDeleteDialog
+        open={bulkDeleteDialogOpen}
+        onOpenChange={setBulkDeleteDialogOpen}
+        selectedIds={Array.from(selectedPatientIds)}
+        onSuccess={() => setSelectedPatientIds(new Set())}
       />
     </div>
   );

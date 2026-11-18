@@ -113,3 +113,22 @@ export function useRemoveDoctorPatientMutation(doctorId: string) {
     },
   });
 }
+
+export function useBulkDeleteDoctorsMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ ids, cascade }: { ids: string[]; cascade?: boolean }) =>
+      doctorApi.bulkDeleteDoctors(ids, cascade),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: doctorKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: ["patients"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+    },
+    onError: (error) => {
+      toast.error("Bulk delete failed", {
+        description: getErrorMessage(error),
+      });
+    },
+  });
+}
