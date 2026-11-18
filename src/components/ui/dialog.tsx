@@ -59,7 +59,7 @@ export function DialogContent({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-foreground/50 backdrop-blur-xs transition-opacity"
         onClick={() => context.onOpenChange(false)}
       />
       {/* Dialog Window */}
@@ -73,8 +73,8 @@ export function DialogContent({
       >
         <button
           onClick={() => context.onOpenChange(false)}
-          className="absolute right-4 top-4 rounded-sm p-1 text-muted-foreground transition-opacity hover:opacity-100 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer"
-          aria-label="Close"
+          className="absolute right-3 top-3 h-10 w-10 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-md text-muted-foreground hover:bg-surface-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer transition-colors"
+          aria-label="Close dialog"
         >
           <X className="h-4 w-4" />
         </button>

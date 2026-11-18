@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { Activity } from "lucide-react";
 import { useCurrentUser } from "@/features/auth/hooks";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -13,15 +13,16 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
   const { data: user, isLoading } = useCurrentUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+      const currentPath =
+        typeof window !== "undefined" ? window.location.pathname : "/dashboard";
+      router.replace(`/login?redirect=${encodeURIComponent(currentPath)}`);
     }
-  }, [user, isLoading, router, pathname]);
+  }, [user, isLoading, router]);
 
   // Loading state while verifying authentication session
   if (isLoading) {
@@ -49,11 +50,17 @@ export default function ProtectedLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Sidebar Navigation */}
-      <Sidebar
-        mobileOpen={mobileMenuOpen}
-        onMobileClose={() => setMobileMenuOpen(false)}
-      />
+      {/* Sidebar Navigation inside Suspense for usePathname */}
+      <Suspense
+        fallback={
+          <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col bg-sidebar" />
+        }
+      >
+        <Sidebar
+          mobileOpen={mobileMenuOpen}
+          onMobileClose={() => setMobileMenuOpen(false)}
+        />
+      </Suspense>
 
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 min-h-screen">
@@ -61,7 +68,16 @@ export default function ProtectedLayout({
 
         <main className="flex-1 w-full lg:pl-64">
           <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
-            {children}
+            <Suspense
+              fallback={
+                <div className="space-y-6">
+                  <div className="h-8 w-48 rounded bg-surface-muted animate-pulse" />
+                  <div className="h-64 rounded-lg bg-surface border border-border animate-pulse" />
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
           </div>
         </main>
       </div>

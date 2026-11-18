@@ -3,9 +3,9 @@
 - [x] 1 Setup: tokens in globals.css, shadcn primitives, env, axios client, providers
 - [x] 2 Auth: login page, token refresh interceptor, protected layout, logout
 - [x] 3 App shell: sidebar + mobile drawer, PageHeader, navigation
-- [ ] 4 Shared components: DataTable, Pagination, SearchInput, FilterBar, ConfirmDialog, EmptyState, StatCard
-- [ ] 5 Doctors: list (search/filters/sort/pagination in URL), create dialog
-- [ ] 6 Doctor detail: profile, patients table, add + delete patient
+- [x] 4 Shared components: DataTable, Pagination, SearchInput, FilterBar, ConfirmDialog, EmptyState, StatCard
+- [x] 5 Doctors: list (search/filters/sort/pagination in URL), create dialog
+- [x] 6 Doctor detail: profile, patients table, add + delete patient
 - [ ] 7 Patients page: list, filters, edit dialog, delete
 - [ ] 8 Dashboard: KPI cards + 3 charts + range toggle
 - [ ] 9 Polish: skeletons, empty/error states, responsive pass, a11y pass, /review
