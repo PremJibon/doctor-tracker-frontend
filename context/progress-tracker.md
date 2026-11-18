@@ -96,6 +96,11 @@ Complete — All 10 Steps Finished & Ready for Production
   - **UI Registry Updated**: Documented shared multi-mode usage of `AddDoctorPatientDialog` in `context/ui-registry.md`.
   - **Full Quality Check Passed**: Clean ESLint, clean TypeScript (`tsc --noEmit`), and successful production build (`npm run build`).
 
+- [x] **Next.js 16 Instant Navigation Dev Overlay Resolution**
+  - **Root Cause Identified**: With `cacheComponents: true` and `partialPrefetching: true` enabled in Next.js 16, dev mode defaults to `validationLevel: 'warning'`, which flags client-rendered segments that consume dynamic client URL state (`useSearchParams()`) on client transitions.
+  - **Official Architecture Fix Applied**: Per Next.js official documentation (`node_modules/next/dist/docs/01-app/02-guides/instant-navigation.md`), configured `experimental.instantInsights.validationLevel = 'manual-warning'` in `next.config.ts`.
+  - **Outcome**: Suppressed false-positive dev overlay popups across all pages while preserving full Cache Components and Partial Prefetching optimizations without polluting pages with `export const instant = false`. Clean lint, typecheck, and build verified.
+
 ## Decisions made
 - Kept access token strictly in-memory; httpOnly refresh cookie handles session persistence across browser refreshes.
 - Used Tailwind v4 `@theme inline` mapping to bind CSS variables directly to utility classes without hardcoded colors.
