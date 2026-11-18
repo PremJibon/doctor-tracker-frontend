@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Search, X, Loader2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export interface SearchInputProps
@@ -118,7 +119,7 @@ export function SearchInput({
       )}
     >
       <div
-        className="pointer-events-none absolute left-3 flex items-center justify-center text-muted-foreground"
+        className="pointer-events-none absolute left-3 flex items-center justify-center text-muted-foreground z-10"
         aria-hidden="true"
       >
         {isPending ? (
@@ -128,7 +129,7 @@ export function SearchInput({
         )}
       </div>
 
-      <input
+      <Input
         ref={inputRef}
         type="text"
         value={value}
@@ -142,12 +143,7 @@ export function SearchInput({
         placeholder={placeholder}
         disabled={disabled}
         aria-label={props["aria-label"] || placeholder}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-border bg-surface pl-9 pr-9 py-2 text-base md:text-sm text-foreground placeholder:text-muted-foreground shadow-sm transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-          "disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px]",
-          className
-        )}
+        className={cn("pl-9 pr-9", className)}
         {...props}
       />
 
@@ -156,7 +152,7 @@ export function SearchInput({
           type="button"
           onClick={handleClear}
           aria-label="Clear search input"
-          className="absolute right-1 flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
+          className="absolute right-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-muted hover:shadow-raised-sm active:shadow-pressed transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>

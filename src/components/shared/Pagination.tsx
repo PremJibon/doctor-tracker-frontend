@@ -124,10 +124,10 @@ export function Pagination({
           disabled={activePage <= 1}
           aria-label="Go to previous page"
           className={cn(
-            "inline-flex items-center justify-center gap-1 rounded-md px-3 h-10 min-h-[40px] min-w-[40px] text-sm font-medium",
-            "border border-border bg-surface text-foreground transition-colors",
-            "hover:bg-surface-muted hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+            "inline-flex items-center justify-center gap-1 rounded-xl px-3 h-10 min-h-[40px] min-w-[40px] text-sm font-medium",
+            "border border-border bg-surface text-foreground shadow-raised-sm transition-all",
+            "hover:shadow-raised active:shadow-pressed",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer"
           )}
         >
@@ -136,7 +136,7 @@ export function Pagination({
         </button>
 
         {/* Page numbers (visible on sm+) */}
-        <div className="hidden sm:flex items-center gap-1">
+        <div className="hidden sm:flex items-center gap-1.5">
           {pageNumbers.map((page, index) => {
             if (page === "ellipsis") {
               return (
@@ -159,11 +159,11 @@ export function Pagination({
                 aria-label={`Go to page ${page}`}
                 aria-current={isCurrent ? "page" : undefined}
                 className={cn(
-                  "flex h-10 min-h-[40px] w-10 min-w-[40px] items-center justify-center rounded-md text-sm font-medium transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
+                  "flex h-10 min-h-[40px] w-10 min-w-[40px] items-center justify-center rounded-xl text-sm font-medium transition-all",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer",
                   isCurrent
-                    ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                    : "border border-border bg-surface text-foreground hover:bg-surface-muted"
+                    ? "bg-primary text-primary-foreground font-semibold shadow-raised border border-primary/20"
+                    : "border border-border bg-surface text-foreground shadow-raised-sm hover:shadow-raised active:shadow-pressed"
                 )}
               >
                 {page}
@@ -184,10 +184,10 @@ export function Pagination({
           disabled={activePage >= totalPages}
           aria-label="Go to next page"
           className={cn(
-            "inline-flex items-center justify-center gap-1 rounded-md px-3 h-10 min-h-[40px] min-w-[40px] text-sm font-medium",
-            "border border-border bg-surface text-foreground transition-colors",
-            "hover:bg-surface-muted hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+            "inline-flex items-center justify-center gap-1 rounded-xl px-3 h-10 min-h-[40px] min-w-[40px] text-sm font-medium",
+            "border border-border bg-surface text-foreground shadow-raised-sm transition-all",
+            "hover:shadow-raised active:shadow-pressed",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer"
           )}
         >

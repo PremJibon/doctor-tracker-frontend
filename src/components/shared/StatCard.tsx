@@ -31,11 +31,11 @@ export function StatCard({
 }: StatCardProps) {
   if (isLoading) {
     return (
-      <Card className={cn("p-6", className)}>
+      <Card className={cn("p-6 rounded-xl border border-border bg-surface shadow-raised", className)}>
         <CardContent className="p-0 space-y-3">
           <div className="flex items-center justify-between">
             <Skeleton className="h-4 w-28" />
-            <Skeleton className="h-10 w-10 rounded-lg" />
+            <Skeleton className="h-10 w-10 rounded-xl" />
           </div>
           <Skeleton className="h-8 w-20" />
           <Skeleton className="h-3.5 w-36" />
@@ -45,14 +45,14 @@ export function StatCard({
   }
 
   return (
-    <Card className={cn("p-6 transition-all hover:shadow-xs", className)}>
+    <Card className={cn("p-6 rounded-xl border border-border bg-surface shadow-raised transition-all", className)}>
       <CardContent className="p-0">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {title}
           </span>
           {icon && (
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-muted text-primary border border-border-subtle shadow-inset">
               {icon}
             </div>
           )}
@@ -65,8 +65,10 @@ export function StatCard({
           {trend && (
             <span
               className={cn(
-                "inline-flex items-center text-xs font-semibold",
-                trend.isPositive ? "text-success" : "text-danger"
+                "inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full border shadow-raised-sm",
+                trend.isPositive
+                  ? "bg-success/10 text-success border-success/20"
+                  : "bg-danger/10 text-danger border-danger/20"
               )}
             >
               {trend.isPositive ? (

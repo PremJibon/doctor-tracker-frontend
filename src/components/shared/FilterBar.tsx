@@ -90,14 +90,14 @@ export function FilterBar({
           variant="outline"
           size="default"
           onClick={() => setMobileDrawerOpen(true)}
-          className="flex-1 justify-between bg-surface border-border text-foreground hover:bg-surface-muted min-h-[40px] px-3.5"
+          className="flex-1 justify-between bg-surface border-border text-foreground shadow-raised-sm hover:shadow-raised active:shadow-pressed min-h-[40px] px-3.5 rounded-xl"
         >
           <span className="flex items-center gap-2 text-sm font-medium">
             <Filter className="h-4 w-4 text-primary" />
             {title}
           </span>
           {hasActiveFilters && (
-            <Badge variant="accent" className="ml-2 px-1.5 py-0 text-xs font-semibold">
+            <Badge variant="accent" className="ml-2 px-1.5 py-0 text-xs font-semibold shadow-raised-sm">
               {activeFilters.length}
             </Badge>
           )}
@@ -109,7 +109,7 @@ export function FilterBar({
             variant="ghost"
             size="sm"
             onClick={onReset}
-            className="min-h-[40px] px-3 text-xs text-muted-foreground hover:text-foreground shrink-0"
+            className="min-h-[40px] px-3 text-xs text-muted-foreground hover:text-foreground shrink-0 rounded-xl"
             aria-label="Reset all filters"
           >
             <RotateCcw className="h-3.5 w-3.5" />
@@ -123,7 +123,7 @@ export function FilterBar({
         <div className="fixed inset-0 z-50 md:hidden flex justify-end">
           {/* Backdrop overlay */}
           <div
-            className="fixed inset-0 bg-foreground/50 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
             onClick={() => setMobileDrawerOpen(false)}
             aria-hidden="true"
           />
@@ -133,7 +133,7 @@ export function FilterBar({
             role="dialog"
             aria-modal="true"
             aria-label="Filter Options"
-            className="relative z-50 flex h-full w-[85%] max-w-sm flex-col bg-surface border-l border-border shadow-xl duration-200 animate-in slide-in-from-right"
+            className="relative z-50 flex h-full w-[85%] max-w-sm flex-col bg-surface border-l border-border shadow-raised duration-200 animate-in slide-in-from-right"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border px-4 py-4 min-h-[56px]">
@@ -141,7 +141,7 @@ export function FilterBar({
                 <Filter className="h-4 w-4 text-primary" />
                 <h2 className="text-base font-semibold text-foreground">{title}</h2>
                 {hasActiveFilters && (
-                  <Badge variant="accent" className="px-1.5 py-0 text-xs font-semibold">
+                  <Badge variant="accent" className="px-1.5 py-0 text-xs font-semibold shadow-raised-sm">
                     {activeFilters.length}
                   </Badge>
                 )}
@@ -149,7 +149,7 @@ export function FilterBar({
               <button
                 type="button"
                 onClick={() => setMobileDrawerOpen(false)}
-                className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-muted transition-colors cursor-pointer"
+                className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-full border border-border bg-surface shadow-raised hover:shadow-raised-sm active:shadow-pressed text-foreground cursor-pointer transition-all"
                 aria-label="Close filters"
               >
                 <X className="h-4 w-4" />
@@ -170,7 +170,7 @@ export function FilterBar({
                   onClick={() => {
                     onReset();
                   }}
-                  className="w-full min-h-[40px] justify-center text-sm"
+                  className="w-full min-h-[40px] justify-center text-sm rounded-xl"
                 >
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Clear all filters
@@ -180,7 +180,7 @@ export function FilterBar({
                 type="button"
                 variant="default"
                 onClick={() => setMobileDrawerOpen(false)}
-                className="w-full min-h-[40px] justify-center text-sm"
+                className="w-full min-h-[40px] justify-center text-sm rounded-xl shadow-raised"
               >
                 Done
               </Button>
@@ -200,7 +200,7 @@ export function FilterBar({
               <Badge
                 key={filter.id}
                 variant="accent"
-                className="inline-flex items-center gap-1.5 py-1 px-2.5 text-xs font-medium rounded-full bg-accent text-accent-foreground border-transparent"
+                className="inline-flex items-center gap-1.5 py-1 px-2.5 text-xs font-medium rounded-full bg-accent text-accent-foreground border border-border/40 shadow-raised-sm"
               >
                 <span>
                   <strong className="font-semibold">{filter.label}:</strong> {filter.value}

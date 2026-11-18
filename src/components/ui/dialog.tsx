@@ -59,7 +59,7 @@ export function DialogContent({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-foreground/50 backdrop-blur-xs transition-opacity"
+        className="fixed inset-0 bg-foreground/40 backdrop-blur-xs transition-opacity"
         onClick={() => context.onOpenChange(false)}
       />
       {/* Dialog Window */}
@@ -67,13 +67,13 @@ export function DialogContent({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative z-50 w-full max-w-lg rounded-lg border border-border bg-surface p-6 shadow-lg duration-200 animate-in fade-in-0 zoom-in-95 max-h-[90vh] overflow-y-auto",
+          "relative z-50 w-full max-w-lg rounded-xl border border-border bg-surface p-6 shadow-raised duration-200 animate-in fade-in-0 zoom-in-95 max-h-[90vh] overflow-y-auto",
           className
         )}
       >
         <button
           onClick={() => context.onOpenChange(false)}
-          className="absolute right-3 top-3 h-10 w-10 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-md text-muted-foreground hover:bg-surface-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer transition-colors"
+          className="absolute right-3 top-3 h-10 w-10 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-muted-foreground hover:bg-surface-muted hover:text-foreground hover:shadow-raised-sm active:shadow-pressed focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer transition-all"
           aria-label="Close dialog"
         >
           <X className="h-4 w-4" />

@@ -27,11 +27,11 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex min-h-[260px] flex-col items-center justify-center rounded-lg border border-dashed border-border bg-surface p-8 text-center animate-in fade-in-50 duration-200",
+        "flex min-h-[260px] flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-surface p-8 text-center animate-in fade-in-50 duration-200",
         className
       )}
     >
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface-muted text-muted-foreground mb-4">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-surface border border-border shadow-inset text-muted-foreground mb-4">
         {icon || <FolderOpen className="h-6 w-6" />}
       </div>
       <h3 className="text-base font-semibold text-foreground tracking-tight">

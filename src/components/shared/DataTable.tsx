@@ -41,15 +41,15 @@ export function DataTable<T>({
     return (
       <div className={cn("w-full space-y-4", className)}>
         {/* Desktop skeleton table */}
-        <div className="hidden md:block overflow-hidden rounded-lg border border-border bg-surface">
-          <div className="border-b border-border bg-surface-muted px-4 py-3 flex gap-4">
+        <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-surface shadow-raised">
+          <div className="border-b border-border bg-surface-muted px-4 py-3.5 flex gap-4">
             {columns.map((col, idx) => (
               <div key={idx} className={cn("flex-1", col.headerClassName)}>
                 <Skeleton className="h-4 w-20" />
               </div>
             ))}
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border/60">
             {Array.from({ length: skeletonRows }).map((_, rIdx) => (
               <div key={rIdx} className="px-4 py-4 flex gap-4 items-center">
                 {columns.map((col, cIdx) => (
@@ -67,14 +67,14 @@ export function DataTable<T>({
           {Array.from({ length: skeletonRows }).map((_, idx) => (
             <div
               key={idx}
-              className="rounded-lg border border-border bg-surface p-4 space-y-3"
+              className="rounded-xl border border-border bg-surface shadow-raised-sm p-4 space-y-3"
             >
               <div className="flex justify-between items-center">
                 <Skeleton className="h-4 w-1/3" />
                 <Skeleton className="h-5 w-16 rounded-full" />
               </div>
               <Skeleton className="h-3.5 w-1/2" />
-              <div className="pt-2 border-t border-border flex justify-between">
+              <div className="pt-2 border-t border-border/60 flex justify-between">
                 <Skeleton className="h-3.5 w-1/4" />
                 <Skeleton className="h-8 w-20 rounded-md" />
               </div>
@@ -100,7 +100,7 @@ export function DataTable<T>({
   return (
     <div className={cn("w-full", className)}>
       {/* Desktop Table View (md+) */}
-      <div className="hidden md:block overflow-x-auto rounded-lg border border-border bg-surface shadow-xs">
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-border bg-surface shadow-raised">
         <table className="w-full text-left text-sm border-collapse">
           <thead>
             <tr className="border-b border-border bg-surface-muted">
@@ -118,7 +118,7 @@ export function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-border/60">
             {data.map((item, index) => {
               const rowKey = keyExtractor(item, index);
               const isClickable = Boolean(onRowClick);
@@ -195,8 +195,8 @@ export function DataTable<T>({
                 tabIndex={onRowClick ? 0 : undefined}
                 role={onRowClick ? "button" : undefined}
                 className={cn(
-                  "rounded-lg border border-border bg-surface p-4 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  onRowClick && "cursor-pointer active:bg-surface-muted"
+                  "rounded-xl border border-border bg-surface p-4 shadow-raised-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  onRowClick && "cursor-pointer active:shadow-pressed"
                 )}
               >
                 {mobileCardRenderer(item, index)}
@@ -222,8 +222,8 @@ export function DataTable<T>({
               tabIndex={onRowClick ? 0 : undefined}
               role={onRowClick ? "button" : undefined}
               className={cn(
-                "rounded-lg border border-border bg-surface p-4 shadow-xs space-y-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                onRowClick && "cursor-pointer active:bg-surface-muted"
+                "rounded-xl border border-border bg-surface p-4 shadow-raised-sm space-y-2.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                onRowClick && "cursor-pointer active:shadow-pressed"
               )}
             >
               {columns
