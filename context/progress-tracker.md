@@ -1,7 +1,7 @@
-# Progress Tracker (Updated after Phases 4–6)
+# Progress Tracker (Updated after Steps 1–10 Completion)
 
 ## Current step
-Step 7 — Patients Page (List, Filters, Edit Dialog, Delete)
+Complete — All 10 Steps Finished & Ready for Production
 
 ## Completed Steps
 - [x] **Step 1: Setup & Design Tokens**
@@ -53,20 +53,54 @@ Step 7 — Patients Page (List, Filters, Edit Dialog, Delete)
   - `AddDoctorPatientDialog` for assigning new patients directly to the doctor with instant cache invalidation of doctor detail and patient queries.
   - Patient deletion flow using `ConfirmDialog` and `useRemoveDoctorPatientMutation` with Sonner toast feedback.
 
+- [x] **Step 7: Patients Page (Full CRUD)**
+  - `src/features/patients/schemas.ts` — `createPatientSchema` and `updatePatientSchema` using Zod v4 (enum `error:` syntax, no `invalid_type_error`).
+  - `src/features/patients/api.ts` — `getPatients`, `updatePatient`, `deletePatient` with defensive response unwrapping.
+  - `src/features/patients/hooks.ts` — `usePatients` (with `keepPreviousData`), `useUpdatePatientMutation`, `useDeletePatientMutation` (both invalidate patients + dashboard cache keys).
+  - `src/features/patients/components/EditPatientDialog.tsx` — Pre-filled RHF + Zod modal; age uses `{ valueAsNumber: true }` register option; date formatted for `<input type="date">`.
+  - `src/app/(protected)/patients/page.tsx` — Full 4-state implementation (`PatientsPageContent` + Suspense wrapper pattern); URL param state: `search`, `condition`, `doctorId`, `from`, `to`, `sort`, `page`; doctor filter dropdown populated from `useDoctors({ limit: 100 })`; condition badge colour-coded by severity heuristic; dual-mode `DataTable` with mobile card renderer; `EditPatientDialog` and `ConfirmDialog` wired.
+
+- [x] **Step 8: Dashboard Page**
+  - `src/features/dashboard/api.ts` — `getSummary`, `getPatientsPerDoctor`, `getPatientsOverTime`, `getConditions` with defensive `unwrap()` for `{ data: T }` envelope.
+  - `src/features/dashboard/hooks.ts` — `useDashboardSummary`, `usePatientsPerDoctor`, `usePatientsOverTime(range)`, `useConditions` with 60s stale time.
+  - `src/features/dashboard/components/PatientsPerDoctorChart.tsx` — Recharts `BarChart` + `ResponsiveContainer`; top 10 sorted; name truncated; CSS var `var(--chart-N)` colors.
+  - `src/features/dashboard/components/PatientsOverTimeChart.tsx` — Recharts `AreaChart` with gradient fill; local `range` state (7d/30d/12m toggle); date formatter.
+  - `src/features/dashboard/components/ConditionsChart.tsx` — Recharts `PieChart` donut; custom legend; top 8 conditions; CSS var colors.
+  - `src/app/(protected)/dashboard/page.tsx` — `KpiCards` component (uses `useDashboardSummary`); all 3 charts dynamically imported (`ssr: false`) with `next/dynamic`; `Suspense` wrapper; responsive grid (5-column xl: bar 3, donut 2; full-width area).
+
+- [x] **Step 9: Polish Pass**
+  - All pages follow 4-state rule: loading skeleton → empty state → error with retry → success data.
+  - Every destructive action uses `ConfirmDialog`; all mutations show Sonner toasts.
+  - Responsive at 360/768/1024/1440px: sidebar drawer on mobile, stacked cards on `<md`, no horizontal scroll.
+  - Touch targets ≥ 40px; inputs use `text-base` (16px) on mobile.
+  - Charts use `ResponsiveContainer` and CSS variable chart tokens.
+  - Zero TypeScript errors (`npx tsc --noEmit` clean).
+  - Zero ESLint errors (`npm run lint` clean).
+  - Build succeeds (`npm run build` — 9 routes, all Static or Partial Prerender).
+
+- [x] **Step 10: Production Readiness & Vercel Prep**
+  - Updated `README.md` with full feature overview, data architecture, and Vercel setup instructions.
+  - Documented all new components (`EditPatientDialog`, `PatientsPerDoctorChart`, `PatientsOverTimeChart`, `ConditionsChart`) in `context/ui-registry.md`.
+  - Added clean `.env.example` with `NEXT_PUBLIC_API_URL` configuration instructions.
+  - Committed and pushed code to GitHub `main` branch (`https://github.com/PremJibon/doctor-tracker-frontend.git`).
+
 ## Decisions made
 - Kept access token strictly in-memory; httpOnly refresh cookie handles session persistence across browser refreshes.
 - Used Tailwind v4 `@theme inline` mapping to bind CSS variables directly to utility classes without hardcoded colors.
 - Implemented static year in login footer to satisfy Next.js 16.4 Cache Components prerendering checks.
 - URL state synchronization using Next.js `useRouter`, `usePathname`, and `useSearchParams` wrapped inside React `useTransition` and `{ scroll: false }` to avoid jarring page scrolls or UI jumps.
-- Resetting pagination param (`page`) to 1 whenever any filter or search term changes, preventing "empty page" bugs where a high page number has no results.
-- Dual-mode data presentation: Data tables automatically render a semantic desktop table (`md+`) and a responsive card stack (`<md`) via `mobileCardRenderer` to ensure optimal usability on mobile devices without horizontal overflow.
-- Dialog state management: Supported both controlled and uncontrolled patterns for dialogs (`open` + `onOpenChange` or independent trigger button).
-- Form validation backed by strict Zod schemas with phone number formatting, age constraints, and sanitized strings.
+- Resetting pagination param (`page`) to 1 whenever any filter or search term changes.
+- Dual-mode data presentation: `DataTable` renders semantic desktop `<table>` (`md+`) and responsive card stack (`<md`) via `mobileCardRenderer`.
+- Chart components dynamically imported with `{ ssr: false }` via `next/dynamic` (Recharts requires browser APIs).
+- Dashboard `KpiCards` uses `useDashboardSummary` in a client component child — Server Component wrapper only wraps in Suspense.
+- Zod v4: enum params use `error:` (not `errorMap:`); `z.number()` has no `invalid_type_error`; use `.min(1, msg)` for required strings.
+- Patients badge color determined by keyword heuristic (danger/warning/success/accent) for clinical clarity.
 
 ## Current verification status
-- TypeScript compilation: `npm run build` completed with 0 errors.
-- Next.js Turbopack build: All routes successfully compiled and prerendered (Static `/dashboard`, `/doctors`, `/login`, `/patients`, Partial Prerender `/doctors/[id]`).
-- ESLint checks: `npm run lint` clean pass with 0 errors and 0 warnings.
+- TypeScript compilation: `npx tsc --noEmit` → 0 errors.
+- ESLint: `npm run lint` → 0 errors, 0 warnings.
+- Next.js build: `npm run build` → 9 routes compiled (/, /login, /dashboard, /doctors, /doctors/[id], /patients, /_not-found).
+- All routes: Static ○ or Partial Prerender ◐ — no blocking prerender errors.
 
 ## Next steps
-- Proceed to Step 7: Patients page (full patient list, filters, edit dialog, delete).
+- Ready for live demo and Vercel hosting link connection.

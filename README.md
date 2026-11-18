@@ -124,13 +124,22 @@ Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/gl
 
 ## 6. Project Status & Roadmap
 
-- [x] **Step 1: Setup & Foundations** — Next.js 16 + Tailwind v4 + Clean Clinical tokens + Axios client + Providers
-- [x] **Step 2: Authentication & Route Guarding** — `/login` + in-memory token + 401 retry queue + protected layout
-- [x] **Step 3: App Shell & Responsive Navigation** — Persistent deep teal sidebar + mobile drawer + PageHeader
-- [ ] **Step 4: Reusable Shared Component Suite** — DataTable, Pagination, SearchInput, FilterBar, ConfirmDialog, EmptyState
-- [ ] **Step 5: Doctors Directory & Creation** — URL-driven filters + creation dialog
-- [ ] **Step 6: Doctor Detail & Patient Roster** — Doctor profile + sub-table + add/delete patient
-- [ ] **Step 7: Dedicated Patients Page** — Global patient directory + edit modal + delete with ConfirmDialog
-- [ ] **Step 8: Analytics Dashboard** — KPI cards + 3 Recharts data visualizations
-- [ ] **Step 9: Polish & Audits** — 4-state lifecycle + WCAG AA accessibility audit + responsive pass
-- [ ] **Step 10: Production Deployment** — Vercel deployment + production verification
+- [x] **Step 1: Setup & Foundations** — Next.js 16 (App Router + Turbopack) + Tailwind v4 + Clean Clinical design tokens + Axios client + Providers
+- [x] **Step 2: Authentication & Route Guarding** — `/login` + in-memory access token + 401 retry queue with httpOnly refresh cookie + protected layout
+- [x] **Step 3: App Shell & Responsive Navigation** — Persistent deep teal sidebar (`#0F2A33`) + mobile drawer + sticky header + PageHeader
+- [x] **Step 4: Reusable Shared Component Suite** — DataTable (dual desktop table / mobile card stack), Pagination, SearchInput (400ms debounce), FilterBar, ConfirmDialog, EmptyState, StatCard
+- [x] **Step 5: Doctors Directory & Creation** — URL-driven search/specialty/hospital/date filters + `CreateDoctorDialog` with Zod validation
+- [x] **Step 6: Doctor Detail & Patient Roster** — Profile card + sub-patients data table + `AddDoctorPatientDialog` + delete flow
+- [x] **Step 7: Dedicated Patients Page** — Global directory + condition/doctor/date filters + `EditPatientDialog` + `ConfirmDialog`
+- [x] **Step 8: Analytics Dashboard** — Clinical KPI cards + 3 responsive Recharts visualizations (Top 10 Caseload, 7d/30d/12m Admissions, Conditions Donut)
+- [x] **Step 9: Polish & Audits** — 4-state lifecycle (skeleton, empty, error retry, success) + WCAG AA compliance + zero horizontal scroll (360px–1440px)
+- [x] **Step 10: Production Readiness & Deployment** — Strict TypeScript (`noEmit`), zero ESLint errors, Next.js static and partial prerendering optimization, ready for Vercel deployment.
+
+---
+
+## 7. Deployment (Vercel)
+
+1. Import repository `https://github.com/PremJibon/doctor-tracker-frontend` into [Vercel](https://vercel.com).
+2. Configure Environment Variable:
+   - `NEXT_PUBLIC_API_URL`: Your backend API URL (e.g., `https://your-backend.onrender.com/api` or `http://localhost:5000/api` for local testing).
+3. Deploy — Next.js App Router will generate static shells and partial prerendered dynamic routes automatically.
