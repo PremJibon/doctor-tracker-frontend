@@ -87,6 +87,15 @@ Complete — All 10 Steps Finished & Ready for Production
   - Enforced 100% tokenized color classes across all layout components.
   - Committed and pushed code to GitHub `main` branch (`https://github.com/PremJibon/doctor-tracker-frontend.git`).
 
+- [x] **Post-Build Enhancement Pass (PRD Alignment & Patients Roster Action)**
+  - **Doctor Detail Patient Roster Action**: Added a prominent, responsive "Add Patient" button on `/doctors/[id]` placed directly adjacent to the patient search bar (and in the hero summary), fully responsive at 375px mobile (`flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto`). Opens `AddDoctorPatientDialog`, submits via `POST /doctors/:id/patients`, gives Sonner feedback, and invalidates doctor patient sub-roster and dashboard queries.
+  - **Doctor Detail Delete Confirmation**: Verified and strengthened `ConfirmDialog` wired to `useRemoveDoctorPatientMutation` for destructive patient unassignment.
+  - **Global Patients Roster "Add Patient" Button**: Added "Add Patient" action button in `PageHeader` on `/patients` reusing the exact same `AddDoctorPatientDialog` component without code duplication.
+  - **Shared Multi-mode `AddDoctorPatientDialog`**: Enhanced dialog to support dual modes: fixed doctor context (on `/doctors/[id]`) and dynamic doctor selection (on `/patients`) with 4-state doctor loading (skeleton/loading, error with retry, empty prompt, select options), Zod validation, tokenized styling, 40px minimum touch targets, and 16px mobile inputs.
+  - **Coordinated Query Invalidation**: Hook `useAddDoctorPatientMutation` centrally invalidates `["doctors", doctorId, "patients"]`, `["doctors"]`, `["patients"]`, and `["dashboard"]` so all views stay in sync after creation.
+  - **UI Registry Updated**: Documented shared multi-mode usage of `AddDoctorPatientDialog` in `context/ui-registry.md`.
+  - **Full Quality Check Passed**: Clean ESLint, clean TypeScript (`tsc --noEmit`), and successful production build (`npm run build`).
+
 ## Decisions made
 - Kept access token strictly in-memory; httpOnly refresh cookie handles session persistence across browser refreshes.
 - Used Tailwind v4 `@theme inline` mapping to bind CSS variables directly to utility classes without hardcoded colors.

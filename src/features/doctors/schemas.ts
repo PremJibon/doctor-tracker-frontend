@@ -32,9 +32,10 @@ export const createDoctorSchema = z.object({
 export type CreateDoctorInput = z.infer<typeof createDoctorSchema>;
 
 export const addDoctorPatientSchema = z.object({
+  doctorId: z.string().trim().optional(),
   name: z.string().trim().min(1, "Patient name is required"),
   age: z.number().min(0, "Age must be positive").max(130, "Please enter a valid age"),
-  gender: z.enum(["Male", "Female", "Other", "Prefer not to say"], {
+  gender: z.enum(["Male", "Female", "Other", "Prefer not to say"] as const, {
     message: "Please select a valid gender",
   }),
   phone: z.string().trim().min(5, "Phone number must be at least 5 characters"),

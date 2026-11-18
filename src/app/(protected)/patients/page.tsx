@@ -4,6 +4,7 @@ import React, { useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import {
   Users,
+  UserPlus,
   Pencil,
   Trash2,
   AlertCircle,
@@ -24,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { usePatients, useDeletePatientMutation } from "@/features/patients/hooks";
 import { useDoctors } from "@/features/doctors/hooks";
 import { EditPatientDialog } from "@/features/patients/components/EditPatientDialog";
+import { AddDoctorPatientDialog } from "@/features/doctors/components/AddDoctorPatientDialog";
 import { Patient } from "@/types/patient";
 import { formatDateTime } from "@/lib/utils";
 
@@ -255,6 +257,16 @@ function PatientsPageContent() {
       <PageHeader
         title="Patients Directory"
         description="Comprehensive clinical patient roster, diagnostics, and care assignments."
+        actions={
+          <AddDoctorPatientDialog
+            trigger={
+              <Button type="button" variant="default" className="gap-2 min-h-[40px] shadow-xs">
+                <UserPlus className="h-4 w-4" />
+                <span>Add Patient</span>
+              </Button>
+            }
+          />
+        }
       />
 
       {/* Search & Filter Controls */}

@@ -45,6 +45,8 @@ function DoctorDetailContent() {
 
   // Selected patient for deletion confirmation
   const [patientToDelete, setPatientToDelete] = useState<Patient | null>(null);
+  // Add patient dialog open state
+  const [isAddPatientOpen, setIsAddPatientOpen] = useState(false);
 
   // Queries
   const {
@@ -263,16 +265,15 @@ function DoctorDetailContent() {
               </div>
 
               {/* Add Patient Action */}
-              <AddDoctorPatientDialog
-                doctorId={doctorId}
-                doctorName={doctor.name}
-                trigger={
-                  <Button type="button" variant="default" className="gap-2 min-h-[40px] shrink-0">
-                    <UserPlus className="h-4 w-4" />
-                    <span>Assign Patient</span>
-                  </Button>
-                }
-              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddPatientOpen(true)}
+                className="gap-2 min-h-[40px] shrink-0"
+              >
+                <UserPlus className="h-4 w-4" />
+                <span>Add Patient</span>
+              </Button>
             </div>
 
             {/* Profile Meta Grid */}
@@ -321,12 +322,23 @@ function DoctorDetailContent() {
             </p>
           </div>
 
-          <div className="w-full sm:w-64">
-            <SearchInput
-              placeholder="Search patients..."
-              paramName="patientSearch"
-              resetPageParam="patientPage"
-            />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+            <div className="w-full sm:w-64">
+              <SearchInput
+                placeholder="Search patients..."
+                paramName="patientSearch"
+                resetPageParam="patientPage"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => setIsAddPatientOpen(true)}
+              className="gap-2 min-h-[40px] w-full sm:w-auto shrink-0 shadow-xs"
+            >
+              <UserPlus className="h-4 w-4" />
+              <span>Add Patient</span>
+            </Button>
           </div>
         </div>
 
@@ -363,15 +375,11 @@ function DoctorDetailContent() {
                   description={
                     patientSearch
                       ? `No patients match "${patientSearch}". Try another query.`
-                      : "This doctor currently has no patients assigned. Click 'Assign Patient' to register one."
+                      : "This doctor currently has no patients assigned. Click 'Add Patient' to register one."
                   }
                   action={{
-                    label: "Assign First Patient",
-                    onClick: () => {
-                      // Trigger Add Patient modal via custom dialog trigger or open state
-                      const btn = document.querySelector<HTMLButtonElement>('[data-trigger-add-patient]');
-                      btn?.click();
-                    },
+                    label: "Add Patient",
+                    onClick: () => setIsAddPatientOpen(true),
                   }}
                 />
               }
@@ -438,6 +446,14 @@ function DoctorDetailContent() {
         onConfirm={handleDeletePatient}
         isPending={removePatientMutation.isPending}
         variant="danger"
+      />
+
+      {/* Add Patient Dialog */}
+      <AddDoctorPatientDialog
+        doctorId={doctorId}
+        doctorName={doctor?.name}
+        open={isAddPatientOpen}
+        onOpenChange={setIsAddPatientOpen}
       />
     </div>
   );

@@ -62,17 +62,27 @@ export function useCreateDoctorMutation() {
   });
 }
 
-export function useAddDoctorPatientMutation(doctorId: string) {
+export function useAddDoctorPatientMutation(defaultDoctorId?: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreatePatientDto) => doctorApi.addDoctorPatient(doctorId, data),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: doctorKeys.doctorPatients(doctorId) });
+    mutationFn: (variables: CreatePatientDto | { doctorId: string; data: CreatePatientDto }) => {
+      const targetDoctorId =
+        "doctorId" in variables ? variables.doctorId : (defaultDoctorId || "");
+      const payload = "data" in variables ? variables.data : variables;
+      return doctorApi.addDoctorPatient(targetDoctorId, payload);
+    },
+    onSuccess: (data, variables) => {
+      const targetDoctorId =
+        "doctorId" in variables ? variables.doctorId : defaultDoctorId;
+      if (targetDoctorId) {
+        queryClient.invalidateQueries({ queryKey: doctorKeys.doctorPatients(targetDoctorId) });
+      }
+      queryClient.invalidateQueries({ queryKey: doctorKeys.lists() });
       queryClient.invalidateQueries({ queryKey: ["patients"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
       toast.success("Patient added successfully", {
-        description: `${data.patient.name} has been assigned to this doctor.`,
+        description: `${data.patient.name} has been assigned to doctor.`,
       });
     },
     onError: (error) => {
