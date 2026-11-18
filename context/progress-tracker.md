@@ -79,9 +79,12 @@ Complete — All 10 Steps Finished & Ready for Production
   - Build succeeds (`npm run build` — 9 routes, all Static or Partial Prerender).
 
 - [x] **Step 10: Production Readiness & Vercel Prep**
-  - Updated `README.md` with full feature overview, data architecture, and Vercel setup instructions.
+  - Updated `README.md` with Live Demo section, demo credentials, free-tier cold-start notes, and screenshot checklist guide.
   - Documented all new components (`EditPatientDialog`, `PatientsPerDoctorChart`, `PatientsOverTimeChart`, `ConditionsChart`) in `context/ui-registry.md`.
   - Added clean `.env.example` with `NEXT_PUBLIC_API_URL` configuration instructions.
+  - Confirmed `.env.local` is gitignored (`git check-ignore`).
+  - Added cross-platform memory-safe build command (`node --max-old-space-size=4096`).
+  - Enforced 100% tokenized color classes across all layout components.
   - Committed and pushed code to GitHub `main` branch (`https://github.com/PremJibon/doctor-tracker-frontend.git`).
 
 ## Decisions made

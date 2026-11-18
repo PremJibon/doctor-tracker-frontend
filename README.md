@@ -10,30 +10,50 @@ Doctor Tracker provides medical staff and healthcare executives with real-time o
 
 ---
 
-## 2. Visual Interface & Responsive Screenshots
+## 2. Live Demo & Deployment
 
-The user interface follows the **"Clean Clinical"** design system: a calm slate neutral surface (`#F6F8FA`), deep teal sidebar chrome (`#0F2A33`), crisp typography via Inter, and semantic status indicators strictly reserved for state changes.
-
-### Desktop Workstation Experience (1440px)
-
-| View | Screenshot / Preview | Highlights |
+| Resource | Target URL | Status |
 | :--- | :--- | :--- |
-| **Clinical Analytics Dashboard** | ![Dashboard Desktop](docs/screenshots/desktop-dashboard.png) | • 3 KPI StatCards with trend telemetry<br>• Top 10 Doctor Caseload (Recharts BarChart)<br>• Patient Intake Trends (7d / 30d / 12m toggle)<br>• Diagnostic Condition Breakdown (Donut PieChart) |
-| **Doctors Management & Directory** | ![Doctors Directory](docs/screenshots/desktop-doctors.png) | • 400ms debounced search with URL sync<br>• FilterBar with specialty, hospital, and date range<br>• Accessible DataTable with sortable headers<br>• Active filter pill chips with individual dismissal |
-| **Doctor Profile & Patient Roster** | ![Doctor Detail](docs/screenshots/desktop-doctor-detail.png) | • Practitioner metadata hero card<br>• Embedded sub-roster with independent pagination<br>• `AddDoctorPatientDialog` modal trigger<br>• Delete flow guarded by `ConfirmDialog` |
-| **Patients Roster & Diagnostics** | ![Patients Directory](docs/screenshots/desktop-patients.png) | • Severity-coded clinical condition badges<br>• Doctor affiliation links to practitioner profiles<br>• Pre-filled `EditPatientDialog` form modal<br>• Permanent removal with `ConfirmDialog` |
+| **Live Frontend Application** | `https://doctor-tracker-frontend.vercel.app` *(or your Vercel deployment URL)* | Ready for Vercel |
+| **Live Backend REST API** | `https://doctor-tracker-backend.onrender.com/api` *(or your backend URL)* | Active |
+| **Local Development API** | `http://localhost:5000/api` | Local server |
 
-### Mobile Handset Experience (375px)
+### Demo Credentials
+For testing and evaluation:
+* **Email**: `admin@clinic.com`
+* **Password**: `admin123456`
 
-| View | Screenshot / Preview | Highlights |
-| :--- | :--- | :--- |
-| **Navigation Drawer** | ![Mobile Drawer](docs/screenshots/mobile-drawer.png) | • Slide-over drawer with backdrop blur<br>• Touch-safe interactive links ($\ge 44\text{px}$)<br>• Integrated user profile & sign-out control |
-| **Stacked Card Roster** | ![Mobile Cards](docs/screenshots/mobile-cards.png) | • Semantic `<table>` seamlessly transitions to card stack below `768px`<br>• Zero horizontal viewport overflow<br>• $16\text{px}$ mobile inputs prevent iOS auto-zoom |
-| **Responsive Visualizations** | ![Mobile Charts](docs/screenshots/mobile-charts.png) | • Recharts charts wrapped in `ResponsiveContainer`<br>• Truncated and angled axis labels prevent mobile clipping<br>• Tap-activated clinical inspection tooltips |
+> [!TIP]
+> **One-Click Autofill**: On the `/login` page, click the **"Admin Demo"** button to auto-fill these credentials instantly with zero manual typing.
+
+> [!NOTE]
+> **Free-Tier Backend Cold-Start**: If hosted on a free-tier cloud platform (such as Render or Railway), the backend spins down after inactivity. The initial request may take **45 to 60 seconds** to wake up the server. If any request exceeds 3 seconds, Doctor Tracker displays a gentle *"Waking up the server (this can take up to a minute on free tier)..."* alert, preventing silent hangs.
 
 ---
 
-## 3. Setup Guide
+## 3. Visual Interface & Screenshot Guide
+
+The user interface implements the **"Clean Clinical"** healthcare design system: calm slate neutral surfaces (`#F6F8FA`), deep teal sidebar chrome (`#0F2A33`), Inter typography, and semantic status indicators strictly reserved for state changes.
+
+### Required Screenshot Capture Checklist (`docs/screenshots/`)
+
+To include your own captured screenshots in this repository, save them into `docs/screenshots/` using the following exact filenames:
+
+| Viewport | Route | Filename | Key Visuals to Capture |
+| :--- | :--- | :--- | :--- |
+| **Desktop (1440px)** | `/login` | `docs/screenshots/desktop-login.png` | Clean Clinical card, Inter typography, "Admin Demo" autofill button |
+| **Desktop (1440px)** | `/dashboard` | `docs/screenshots/desktop-dashboard.png` | 3 KPI StatCards, Caseload BarChart, 7d/30d/12m AreaChart, Conditions Donut |
+| **Desktop (1440px)** | `/doctors` | `docs/screenshots/desktop-doctors.png` | SearchInput, FilterBar with badges, sort dropdown, accessible DataTable |
+| **Desktop (1440px)** | `/doctors/[id]` | `docs/screenshots/desktop-doctor-detail.png` | Practitioner profile hero, sub-roster table, Add Patient modal trigger |
+| **Desktop (1440px)** | `/patients` | `docs/screenshots/desktop-patients.png` | Severity-coded condition badges, doctor links, Edit & Delete action buttons |
+| **Mobile (375px)** | `/dashboard` | `docs/screenshots/mobile-dashboard.png` | Stacked KPI cards, responsive Recharts charts with angled/truncated labels |
+| **Mobile (375px)** | `/doctors` | `docs/screenshots/mobile-doctors.png` | Stacked responsive card layout, mobile search and filter trigger |
+| **Mobile (375px)** | Open Drawer | `docs/screenshots/mobile-drawer.png` | Deep teal slide-over drawer with backdrop blur and touch targets |
+| **Mobile (375px)** | `/patients` | `docs/screenshots/mobile-patients.png` | Mobile patient card stack, severity badges, touch-friendly action buttons |
+
+---
+
+## 4. Setup Guide
 
 ### Prerequisites
 * **Node.js**: v20.x or higher
@@ -78,7 +98,7 @@ The user interface follows the **"Clean Clinical"** design system: a calm slate 
 
 ---
 
-## 4. System Architecture & Data Flow
+## 5. System Architecture & Data Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -111,7 +131,7 @@ The user interface follows the **"Clean Clinical"** design system: a calm slate 
 
 ---
 
-## 5. Technical Decisions Deep Dive
+## 6. Technical Decisions Deep Dive
 
 ### Decision 1: In-Memory Access Token Storage vs. `localStorage`
 * **Context**: Single-page web applications often store authentication tokens in `localStorage` or `sessionStorage` for persistence across reloads.
@@ -130,7 +150,7 @@ The user interface follows the **"Clean Clinical"** design system: a calm slate 
 
 ---
 
-## 6. Design System: "Clean Clinical"
+## 7. Design System: "Clean Clinical"
 
 Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/globals.css`:
 * **Page Background**: `#F6F8FA`
@@ -145,7 +165,7 @@ Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/gl
 
 ---
 
-## 7. Project Status & Roadmap
+## 8. Project Status & Roadmap
 
 - [x] **Step 1: Setup & Foundations** — Next.js 16 (App Router + Turbopack) + Tailwind v4 + Clean Clinical design tokens + Axios client + Providers
 - [x] **Step 2: Authentication & Route Guarding** — `/login` + in-memory access token + 401 retry queue with httpOnly refresh cookie + protected layout
@@ -160,7 +180,7 @@ Implemented via Tailwind CSS v4 and custom semantic design tokens in `src/app/gl
 
 ---
 
-## 8. Deployment (Vercel)
+## 9. Deployment (Vercel)
 
 1. Import repository `https://github.com/PremJibon/doctor-tracker-frontend` into [Vercel](https://vercel.com).
 2. Configure Environment Variable:
